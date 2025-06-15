@@ -1,0 +1,66 @@
+name: Build LaTeX on Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build-latex:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LaTex compilers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full latexmk
+
+      - name: Create artifact directory
+        run: mkdir -p output
+
+      - name: Compile LaTex
+        run: |
+          shopt -s nullglob
+          for dir in [0-9][0-9][0-9][0-9]; do
+            if [ -d "$dir" ]; then
+              echo "Processing $dir ..."
+              cd "$dir"
+              for pdffile in *.pdf; do
+                if [ -f "$pdffile" ]; then
+                  cp "$pdffile" "../output/$pdffile"
+                fi
+              done
+              for texfile in *.tex; do
+                if [ -f "$texfile" ]; then
+                  echo "Compiling $dir $texfile ..."
+                  latexmk -pdf "$texfile"
+                  pdffile="${texfile%.tex}.pdf"
+                  if [ -f "$pdffile" ]; then
+                    mv "$pdffile" "../output/$pdffile"
+                  else
+                    echo "PDF file $pdffile not found after compilation."
+                  fi
+                fi
+              done
+              cd ..
+            fi
+          done
+
+      - name: Upload Compiled PDFs as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-TDRs
+          path: output/
+
+      - name: Release
+        uses: ncipollo/release-action@v1.14.0
+        if: github.event_name == 'release'
+        with:
+          artifacts: "output/*"
+          allowUpdates: true
+          omitNameDuringUpdate: true
+          omitBodyDuringUpdate: true
