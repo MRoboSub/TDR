@@ -40,7 +40,6 @@
 Zayn Baig, Muskaan Mittal, Carter Kassin, Brady Messock, Luke VanderHeuvel % Team leads
 \\ 
 Kaden Chirco, Thales Protopapas, Miles Pilgeram, Ashley McPike, Arnav Mummineni % Other members
-% TODO add rest of names
 }
 
 %
@@ -53,20 +52,13 @@ Kaden Chirco, Thales Protopapas, Miles Pilgeram, Ashley McPike, Arnav Mummineni 
 \rhead{\thepage}
 
 \begin{abstract}
-% Zayn is happy with the abstract
 Michigan Robotic Submarine is an undergraduate student project team at the University of Michigan in its sixth year participating in the RoboSub competition. We developed our autonomous underwater vehicle (AUV), Montemayor, shown in Fig. 1, to improve our accuracy and reliability on previous tasks while maintaining potential for future developments. To improve iteration speed, we developed a software simulator to provide software members a testing ground before running in-water verification. To enhance organization and robustness, we overhauled our motor controller PCB and developed a battery voltage monitor. To modernize our software stack, we migrated from Robot Operating System (ROS) version 1 to ROS version 2 while continuing to individualize our implementation with custom motor controller software, a custom PID controller, and a revamped machine learning stack. Finally, we laid the groundwork for future improvement like improved localization and control using our DVL, additional mechanisms to complete new tasks, and adding electrical safety mechanisms to prevent future damage and setbacks.
-% This year we focused on individualizing our mechanical, electrical, and software solutions, increasing our domain knowledge over the components we use and reducing dependency on COTS (commercial-off-the-shelf parts).
-%-- ROS 2 Migration
-%-- Custom Thruster Controller board (ESP32) as well as custom Thruster Controller code
-%-- New refreshed onboarding
-%-- New teleop code.
-%-- DVL?????
-%-- fuses and electrical safety stuff
+
 
 \end{abstract}
 
 \section{Competition Strategy} \label{sec:comp_strat}
-This year marks our last year focusing our development and competition strategy around our 2023 hull. As such, we catered to maximizing the competitive potential of our current submarine by improving AUV capabilities and system robustness. Some areas that we identified as established strengths include our machine learning pipeline, which we were able to quickly train and utilize at previous competitions, and our task planner that maps out the failure cases and fallback states for each task. To make our system electrically robust and better organize our Electronic Speed Controllers (ESCs), we developed custom motor controller PCBs. To refine AUV capabilities, we developed a custom PID controller, custom motor controller code, and custom teleoperation code to enhance flexibility and reduce unnecessary reliance on external packages. We also migrated our software stack to ROS 2 \cite{b6} after ROS 1 reached end-of-life in June 2025.
+Competition strategy begins with aligning our robot's current and near-term planned capabilities with the highest value tasks available given those capabilities. We are continuing to use the hull we first designed in 2023, though this will our last year doing so. As such, we catered our design towards maximizing the competitive potential of our current submarine by improving AUV capabilities and system robustness. Some areas that we identified as established strengths include our machine learning pipeline, which we were able to quickly train and utilize at previous competitions, and our task planner which coordinates high-level, logical transitions between robot actions as well as mapping out failure cases and fallback states for each task. To make our system electrically robust and better organize our Electronic Speed Controllers (ESCs), we developed custom motor controller PCBs. To refine AUV capabilities, we developed a custom PID controller, custom motor controller code, and custom teleoperation code to enhance flexibility and reduce unnecessary reliance on external packages. We also migrated our software stack to ROS 2 \cite{b6} after ROS 1 reached end-of-life in June 2025.
 
 \subsection{Target Tasks} \label{ssec:target_goals}
 Our target tasks for the 2026 RoboSub competition are the Heading Out (coin flip), Begin Assessment (gate), Avoid Debris (slalom), and Return Home tasks, with a stretch goal of the Recon (bins) task.
@@ -78,7 +70,7 @@ To complete the coin flip task, our design requires the AUV to sense its gyrosco
 
 \subsubsection{Begin Assessment---Gate}
 \label{sssec:gate_task}
-To pass through the gate, we use a machine learning model to detect the image on the gate and center on it. We decided to always choose the same image to center on, as this allows us to focus on optimizing the model’s performance for that specific image. Additionally, this makes it so that we can complete the bin and slalom tasks in the same way every run to maximize points (namely, the same side of the slalom poles and the same side to target on the bin), enabling more consistency throughout our runs.
+To pass through the gate, we use a machine learning model to detect the image on the gate and center on it. We decided to always choose the same image to center on, as this allows us to focus on optimizing the model’s performance for that specific image. Additionally, this makes it so that we can complete the bin and slalom tasks in the same way every run to maximize points (namely, the same side of the slalom poles and the same side target on the bin), enabling greater run-to-run consistency.
 
 \begin{figure}
     \centerline{\includegraphics[scale=0.35]{images/FullSub2025-5.png}}
@@ -88,7 +80,7 @@ To pass through the gate, we use a machine learning model to detect the image on
 
 \subsubsection{Path Planning}
 \label{sssec:path_planning_task}
-In order to reach the slalom and bins tasks, we intend to use the path marker, which makes use of an additional camera pointed towards the bottom of the pool. In the past, we have encountered difficulties in utilizing HSV color-detection to reliably detect the path marker. As such, this year, we employ a segmentation model to identify the path marker more reliably, irrespective of lighting or water conditions. Through the segmentation model, we can find the contour of the path marker and align our submarine towards the next task.
+In order to reach the slalom and bins tasks, we intend to use the path marker, which makes use of an additional camera pointed towards the bottom of the pool. In the past, we have encountered difficulties effectively utilizing HSV color detection to reliably detect the path marker. As such, this year, we will employ a segmentation model to identify the path marker more reliably, irrespective of lighting or water conditions. Through the segmentation model, we can find the contour of the path marker and align our submarine towards the next task.
 
 \subsubsection{Avoid Debris---Slalom}
 \label{sssec:slalom_task}
@@ -96,7 +88,7 @@ We also aim to achieve maximum points on the slalom task by identifying and prop
 
 \subsubsection{Recon---Bins}
 \label{sssec:bins_task}
-Last year, we had limited success in reaching the bins due to difficulty navigating through the slalom poles. Provided we can successfully complete slalom navigation using machine-learning, this year, we intend to complete the bins task for the first time as a stretch goal. We intend to maximize points by dropping two markers into the sides of the bin corresponding to our chosen side of the gate. For the past two years, we have experimented with various designs. Our most recent iteration will is able to drop each of the markers one at a time. Once we reach the bins, we will employ machine learning-based object detection to find the corresponding "Survey \& Repair" or "Search \& Rescue" image. Next, to center on the bin, we alternate descending and re-centering on the bin, switching between the two based on the visual distance to the center of the bin in the bottom camera feed. We do these movements separately rather than simultaneously to prevent the camera from potentially losing sight of the bin.
+Last year, we had limited success in reaching the bins due to difficulty navigating through the slalom poles. Provided we can successfully complete slalom navigation using the machine learning method mentioned, this year, we intend to complete the bins task for the first time as a stretch goal. We plan to maximize points by dropping two markers into the sides of the bin corresponding to our chosen side of the gate. For the past two years, we have experimented with various designs. Our most recent iteration will is able to drop each of the markers one at a time from the same dropper. Once we reach the bins, we will employ machine learning-based object detection to find the corresponding "Survey \& Repair" or "Search \& Rescue" image. Next, to center on the bin, we alternate descending and re-centering on the bin, switching between the two based on the visual distance to the center of the bin in the bottom camera feed. We do these movements separately rather than simultaneously to prevent the camera from potentially losing sight of the bin.
 
 \subsubsection{Return Home}
 \label{sssec:return_home_task}
@@ -120,7 +112,7 @@ Should the vehicle complete some or all of the other tasks we set out to accompl
 \label{sssec:hull}
 Our hull is machined from 6061 aluminum with half inch walls to allow for long term reusability. It is a component we recovered from our previous AUV to reduce manufacturing costs, and its modularity characteristics enable easy modifications. It has three windows, two for a front camera and bottom camera and one that provides visibility to the electrical systems for quick troubleshooting. A double o-ring face seal was used at each port to create a redundant seal that ensures a reliable leak proof sub. A lid is mounted to the hull via hinges and secured in place using latches when the sub is underwater. This hinge and latch system makes accessing electronics a quick and simple process. The submarine also contains an eight-thruster configuration, allowing it to move in all six degrees of freedom (DOF).
 
-To meet the need for frequently shifting components and ballast weights for weight distribution and adding components over time, we included a new bottom plate with a plethora of holes and slots allowing for dynamic redesign. This bottom plate also protects sub’s vertical thrusters from impact. We utilized our modular design to add new dropper and grabber mechanisms to the AUV. Slight modifications to the frame around the hull allowed us to add these components while keeping the vehicle slightly positively buoyant.
+To meet the need for frequently shifting components and ballast weights for weight distribution and adding components over time, we included a new bottom plate with a plethora of holes and slots allowing for dynamic redesign. This bottom plate also protects sub’s vertical thrusters from impact. We utilized our modular design to prototype new dropper and grabber mechanisms to the AUV. Slight modifications to the frame around the hull allowed us to add these components while keeping the vehicle slightly positively buoyant.
 
 We also implemented new mounts for the submarine's angled thrusters. These mounts contain thruster shrouds to protect the AUV from wall collisions. We also improved the hydrodynamics of the AUV by redesigning the hull to have reduced thickness, and proportionally reducing the buoyancy foam to achieve near-neutral buoyancy.
 
@@ -137,7 +129,7 @@ To collect and move samples, we implemented a claw mechanism (Fig \ref{fig:grabb
 
 \subsubsection{Dropper}
 \label{sssec:dropper}
-This year, we also implemented a marker dropper subsystem (Fig \ref{fig:dropper}). This year, we have chosen to utilize a single dropper that contains two markers. We have designed a mechanism that allows the markers to only be dropped one at a time, and cannot be unintentionally dropped. The dropper is 3-D printed via FDM out of PLA. To hold our markers in place, we have another PLA part that functions as a rotating, T-shaped guide that connects directly to our servo and holds the markers away from the opening on the bottom of our base. 3-D printing was used for the design because it is easy to produce, modify, and replace, and our part does not undergo a lot of stress.
+This year, we also implemented a marker dropper subsystem (Fig \ref{fig:dropper}). In this design, we have chosen to use a single dropper that contains two markers, which can only be dropped one at a time. The dropper is 3-D printed via FDM out of PLA. To hold our markers in place, we have another PLA part that functions as a rotating, T-shaped guide that connects directly to our servo and holds the markers away from the opening on the bottom of our base. 3-D printing was used for the design because it is easy to produce, modify, and replace, and our part does not undergo a lot of stress.
 
 \begin{figure}[h]
     \centerline{\includegraphics[scale=0.22]{images/Marcus_Dropper.png}}
@@ -148,39 +140,24 @@ This year, we also implemented a marker dropper subsystem (Fig \ref{fig:dropper}
 \label{sssec:New_Sub}
 This year, we began manufacturing the new submarine. This new design consists of a 6061 aluminum cylindrical hull that holds our electronics on a sliding tray, connected to a frame of aluminum extrusion. We made the decision to change the shape of our hull from previous years to make all of the manufacturing possible in-house, so we don't have to send out material to get it machined for us, saving money. It has one window on the main hull, for viewing the electronics and for our front camera. Following from our current design, we are using a double o-ring face seal for redundancy and to give us a similar hinge and latch system as before.
 
-Unlike the Montemayor, our new sub does not store the battery in the main hull. Instead, we have a separate acrylic enclosure for it, recovered from our previous AUVs. Doing this will allow us to keep our center of gravity along the midline of the sub, and also keep it low for hydrostatic stability. %Bunch more to talk about, eg buoyancy/ballasting,thrusters, degrees of freedom, frame mounting, etc
-%Replace figure below with image of new hull CAD if possible (File-->Export-->Image in NX), then import the file into the images file in this doc and change file name below to match image
-% \begin{figure}[h]
-%     \centerline{\includegraphics[scale=0.5]{images/Dropper.PNG}}
-%     \caption{CAD of the dropper mechanism which mounts to the bottom plate of the hull.}
-%     \label{fig:sub3}
-% \end{figure}
+Unlike the Montemayor, our new sub does not store the battery in the main hull. Instead, we have a separate acrylic enclosure for it, recovered from our previous AUVs. Doing this will allow us to keep our center of gravity along the midline of the sub, and also keep it low for hydrostatic stability. 
 
 \subsection{Electrical Stack}
 \label{ssec:electrical}
-% Listing what we need for electrical:
-% More on voltage monitor contraption pls
-% \subsubsection{Newly Created Sub-Team} % I took out this section
-% \label{sssec:electrical_subteam}
-% This year, we saw an unprecedented growth in students interested in developing electronics crucial to our AUV. Thus, to more effectively lead and compartmentalize our team, we separated the electrical sub-team from the software team. To facilitate this transition, we invested time and energy in gently onboarding the new members (many of whom were freshmen) and familiarizing them with the submarine and the team.
 
 \subsubsection{Fuses}
 \label{sssec:fuses}
 After experiencing an electrical fire while live testing the AUV last year, we decided to implement fuses on multiple components. Accordingly, fuses are integrated on the motor control boards for each ESC, as well as our Doppler Velocity Log (DVL). 
-%\subsubsection{Inertial Measurement Unit}
-%\label{sssec:imu}
-%The Inertial Measurement Unit is implemented to measure and report acceleration and angular velocity, and provides general information about AUV orientation and movement. This is vital for the software sub-team to implement thruster mixing and path planning for our AUV.
 
-% Zayn (05/09/2026): We need to decide what to keep/remove below v v v
 \subsubsection{Hall Effect Sensors}
 \label{sssec:hall_effects}
 To control the behavior of the AUV while disconnected from its tether, we used two latching hall effect sensors. Magnets trigger these sensors to control the starting, stopping, and resetting of other sensors (in particular, the IMU) without needing a live connection. The ability to quickly control the state of our sensors externally improves the efficiency of our testing setup time. Once a state is activated, an indicator LED is lit for visual verification. 
 
 \subsubsection{Motor Control Board}
 \label{sssec:motor_board}
-We identified the motor control electrical subsystem as a top priority due to its critical functionality, frequency of maintenance, and large space overhead. Previously, we utilized 4 printed circuit boards, each containing two electronic speed controllers (ESCs), to control our 8 motors. This became an issue because the circuit boards had a very large footprint, forcing them to be stacked to fit properly inside the submarine. Coupled with the loss of reliable electrical connections after long-term use, maintenance became very difficult. Not only that, the boards relied on an external signal wire for each ESC, meaning that there were 8 wires that individually had to be plugged in.
+We identified the motor control electrical subsystem as a top priority due to its critical functionality, frequency of maintenance, and large space overhead. Previously, we utilized 4 printed circuit boards (PCB), each containing two electronic speed controllers (ESCs), to control our 8 motors. This became an issue because the circuit boards had a very large footprint, forcing them to be stacked to fit properly inside the submarine. Coupled with the loss of reliable electrical connections after long-term use, maintenance became very difficult. Not only that, the boards relied on an external signal wire for each ESC, meaning that there were 8 wires that individually had to be plugged in.
 
-As a result, we chose to consolidate the 4 circuit boards with 2 ESCs each into 2 circuit boards of 4 ESCs, halving the number of wires. The ESCs still mount directly to the circuit boards via screw-block terminals for ease of replacement. The boards receive power through an XT60 power connector, which allows for easy and spark-free connections. To reduce the amount of signal wires, each motor board includes an RJ45 port for 4 PWM signal lines. This, tied with a new signal generator board, reduced the number of wires onboard by 14.
+As a result, we chose to consolidate the 4 PCBs with 2 ESCs each into 2 PCBs of 4 ESCs, halving the number of wires. The ESCs still mount directly to the circuit boards via screw-block terminals for ease of replacement. The boards receive power through an XT60 power connector, which allows for easy and spark-free connections. To reduce the amount of signal wires, each motor board includes an RJ45 port for 4 PWM signal lines. This, tied with a new signal generator board, reduced the number of wires onboard by 14.
 
 \begin{figure}
     \centering
@@ -214,14 +191,6 @@ We continue to use our custom power distribution PCB, which utilizes an off-the-
 One challenge while operating the submarine has been the need to periodically remove it from the water and measure the battery voltage  to avoid discharging past safe levels. Thus, we designed a custom battery voltage monitor that is visible even once the submarine is sealed. It consists of a custom PCB, an ATTiny85 microcontroller, a TM1637 LED display, and a basic voltage divider circuit.
 
 \subsection{Software Stack}
-% Zayn/Colten (05/09/26):
-% GPU used is Jetson Orin Nano
-% Summarize info about the PixHawk
-% Serial communication happens with the pysserial package (not ROS specific)
-% ESP 32 doesn't care about the ROS (written using Arduino code)
-% Keep the section on the Flight Controller (maybe summarize)
-% Overhaul the color detection in favor of object detection (more in Muskaan's wheel house)
-%
 \label{ssec:software}
 Our software stack utilizes ROS2 (Robot Operating System) to distribute our logic into distinct modules called nodes. These nodes are organized into packages based on their role in the AUV's operation. Fig. \ref{fig:software_architecture} shows these packages, with arrows representing the general flow of information between packages. The majority of our code is written in Python, except for some portions of the hardware abstraction layer (HAL), which is written in C++.
 
@@ -232,16 +201,10 @@ Our software stack utilizes ROS2 (Robot Operating System) to distribute our logi
 \end{figure}
 
 \subsubsection{Computing Architecture}
-% Zayn (05/09/26): Needs a LOT of work
-% Colten's taking this
-% Colten (05/09/26): Currently the outdated parts are stripped out, will expand more later
 \label{sssec:comp_arch}
-Our computing architecture features a distributed layout to enable greater flexibility and faster iteration. Most of our computing is performed on our Jetson Orin Nano. This is the most powerful computer in the system, so it runs our computer vision, machine learning, high-level planning, localization, and control modules. Expanding on the control modules, our motor control system utilizes custom solutions: an Inertial Measurement Unit (IMU), a thruster control board and driver, and thruster mixing code. All of this now also runs on the Jetson Orin Nano. For interfacing with our low-power devices---namely, our depth sensor, hall-effect sensors, and indicator lights-–-we use an Arduino, which the Jetson communicates with via \verb|pyserial|.
+Our computing architecture features a distributed layout to enable greater flexibility and faster iteration. Most of our computing is performed on our Jetson Orin Nano. This is the most powerful computer in the system, so it runs our computer vision, machine learning, high-level planning, localization, and control modules. Among these control modules include our custom thruster control board and driver, and custom thruster mixing code. For interfacing with our low-power devices--namely, our depth sensor, hall-effect sensors, and indicator lights–-we use an Arduino, which the Jetson communicates with via \verb|pyserial|.
 
 \subsubsection{Flight Controller}
-% Zayn (05/09/26): I like this section. I think maybe we can summarize it a little but I wouldn't mind keeping this section as-is.
-% Colten's taking this
-% Colten (05/09/26): Cut out mentions of the Pixhawk Flight Controller, besides that, only changed some verbage
 \label{sssec:flight_controller}
 For the thruster control system, we developed an in-house thruster mixing system and thruster control board driver. Our system was initially designed referencing Tartan AUV's thruster mixing and thruster control code.
 
@@ -265,36 +228,30 @@ To measure our orientation, we use the InertialSense IK-1-IMX-5 IMU. This IMU wa
 % Muskaan is done updating this section as of May 2026
 In order to detect the path marker, we historically utilized classical computer vision (CV) techniques based on HSV thresholding. One notable challenge with this approach is the variable lighting conditions faced during the competition depending on the time of day. The bright sunlight, reflecting through the water, caused the AUV to incorrectly consider lines at the bottom of the pool as being within our path marker HSV ranges.
 
-Thus, this year, we have switched to a machine learning approach to detect the path marker. We fine-tune a YOLOv8 segmentation model \cite{b7} on images taken at competition. This model both detects our desired object and gives us a mask for the detection. We then use geometrical methods from OpenCV \cite{b8} to determine the orientation of the path marker from the mask, thus informing our AUV's trajectory.
+Thus, this year, we have switched using machine learning to detect the path marker. We fine-tune a YOLOv8 segmentation model \cite{b7} on images taken at competition. This model both detects our desired object and gives us a mask for the detection. We then use geometrical methods from OpenCV \cite{b8} to determine the orientation of the path marker from the mask, thus informing our AUV's trajectory.
 
 \subsubsection{Image Detection (YOLOv5 Model)}
 \label{sssec:ml_flow}
-% Muskaan is done updating this section as of May 2026
 To detect the images on the gate and in the bins, we continue to use our machine learning pipeline, wherein we fine-tune a YOLOv5 object-detection neural network \cite{b3} using data collected during competition itself. Our model uses the PyTorch framework, an open source machine learning framework that is an industry standard for this type of work \cite{b4}.
 
-% Zayn (05/09/2026): It might be useful to talk more about generation of test sets for ML depending on how much space we have left.
-% This was from 2 years ago and can be streamlined a bit
-% Muskaan (05/13/2026) I have tried to streamline the following paragraph:
 We continue to use our 2024 process of labeling data and training models using scripts to automate training on the University of Michigan's Great Lakes Computing high performance compute (HPC) clusters. We created a data pre-processing script to verify image attributes. We then upload images to \href{https://labelbox.com/}{LabelBox} and manually label the dataset. Subsequent scripts generate the label files and segment them into the training and testing designations. To evaluate model performance on unseen data, we utilize a model evaluation script provided by the Ultralytics YOLO package. This allows us to efficiently train our model using only data we collected at the competition itself. This year, we ported our object-detection pipeline to ROS 2, as well as improving robustness and code readability.
 
 \subsubsection{Custom PID}
 \label{sssec:custom_pid}
-% this section has been updated by muskaan may 2026
 This year, we replaced our third-party PID control library with a custom PID module as the third-party library is not compatible with ROS 2. In our custom control architecture, pose is regulated through six independent PID loops, one for each degree of freedom. We utilize angle wrap-around for rotational DOFs, integral wind-up mitigation via conditional integration and integral clamping, and derivative kick prevention by computing the D-term from delta position rather than delta error.
 
 \subsubsection{Task Planner}
 \label{sssec:task_planner}
-The task planner is the authority for coordinating system components to coordinate high-level logic, like navigating competition tasks. Our task planner is a state machine, where the AUV is assigned a current state that dictates its logic and may produce a state transition if certain conditions are met.
+The task planner is the high-level architect coordinating the interplay of subsystems necessary to complete competition tasks. Our task planner is a state machine, where the AUV is assigned a current state that dictates its logic and may produce a state transition if certain conditions are met.
 
 Transition maps define which new state the vehicle is assigned if a state transition is produced. We use several transition maps to refine various routines, including a complete competition map or specific task maps. We can use different maps at testing time to isolate the relevant behaviors.
 
-In the past few years, we have been significantly improving our state machine framework to reduce operational friction and catch errors before water-test time. The task planner supports overriding parameters on a per transition map basis, allowing us to set different target depths, angles, distances etc. between testing and competition environments, significantly reducing testing preparation overhead. We also added the ability to start running the state machine from any state, rather than just the predefined start state, which helps during tests to isolate and test potentially faulty units of behavior. Finally, all of our planning code can be checked with a static python type checker, \verb|mypy|. This notifies us ahead of time of potentially faulty code, making our overall codebase more reliable. The additional type safety also helps our development environment to provide much more relevant auto-complete suggestions, increasing developer productivity. 
+In the past few years, we have been significantly improving our state machine framework to reduce operational friction and catch errors before water-test time. These features include state parameter overriding, the ability to start the state machine at any state, and static type checking with \verb|mypy|, allowing our team to more quickly prototype, test, and debug state machine logic. 
 
 \section{Testing Strategy}
 \label{sec:testing}
 
 \subsection{Teleoperation Framework}
-% teleop updated may 2026 by muskaan :)
 \label{ssec:teleop}
 This year, we entirely re-hauled our teleoperation (teleop) framework, allowing a human driver to manually control the AUV's 6DOF velocities using a Logitech controller, while other subsystems run autonomously. This enables us to gather controlled field data (e.g. for cameras) and debug components in isolation. By writing our own teleop framework, we are not limited to any specific hardware or software such as ArduSub and are able to provide tighter integrations with our other systems. We also mapped specific inputs from the controller to emergency-stop the AUV, as well as to reset sensor and localization readings. Being greatly simplified while maintaining functionality, we have found this teleop framework to be extremely useful for testing and iteration.
 
@@ -319,8 +276,6 @@ The simulation runs as a game in the Bevy game engine \cite{b10} with Avian phys
 The simulation incorporates several game elements including the Gate, Slalom, and Bins. Using known camera parameters, the simulation generates predicted object detections, which are used to test higher level planning logic. This helped significantly reduce iteration times because actual machine-learning based object detections are too expensive to run on development machines and access to in-water environments large enough to accommodate multiple game elements was very rare.
 
 \section*{Acknowledgments}
-% Zayn (05/09/2026): I want to add acknoledgement for the Ford Robotics Building Pool staff, they have been super helpful
-% (05/20/2026): Muskaan has added FRB staff names
 The Michigan Robotic Submarine team would like to thank our 2025-2026 sponsors, listed in Appendix \ref{sec:sponsors}, for their monetary support. We'd also like to thank the individuals who donated to our team during the University of Michigan's Giving Blue Day fundraiser. 
 
 We would also like to thank our advisor Dr. Katie Skinner for continuously supporting our team by advising us and overseeing the Multidisciplinary Design Program, which allows members to earn class credit for their contributions to our team.
@@ -425,13 +380,13 @@ We are also grateful for the image data provided through the RoboNation data sha
         DVL & Cerulean Sonar             & Tracker 650         & 3 velocity sensors. Max depth: 300m & \$2,990.00 & 2024 \\ 
         Barometer & Blue Robotics & Bar02 Depth Sensor & 0–2 bar (10m depth), I2C, 0.16mm resolution & \$80.00 & 2022 \\
         Camera(s)               & Stereolabs, BR     & ZED2, Low-light HD USB Camera & Stereo vision, pathmarker detection & \$449.00, \$99.00  & 2020, 2021 \\
-        Testing Controller & Logitech & Logitech F310 & 10 programmable buttons, 4 switch floating D-Pad & \$19.99 & 2021-2026 \\
+        Testing Controller & Logitech & Logitech F310 & 10 programmable buttons, 4 switch floating D-Pad & \$19.99 & 2021 \\
         
         \addlinespace[1.5em]
         \rowcolor{white}\multicolumn{6}{@{}l}{\textbf{Software \& Autonomy Architecture}} \\
         \midrule
         Localization & N/A & Custom  & Factor Graph-based sensor fusion & \textemdash & 2026 \\
-        Vision                  & N/A                         & YOLOv5 / YOLOv8 & Train CNNs; OpenCV inference  & \textemdash & 2023-2026\\
+        Vision                  & N/A                         & YOLOv5 / YOLOv8 & Train CNNs; OpenCV inference  & \textemdash & 2023, 2026\\
         Autonomy                & N/A                          & Custom              & Task-planning state machine   & \textemdash         & 2024\\ 
         GNC & N/A                & Custom              & PID control                   & \textemdash        & 2026 \\ 
         \bottomrule
